@@ -4,19 +4,29 @@
   become: true
   pre_tasks:
 
-  - name: install updates (Oracle Linux)
+  - name: Update repo cache (Oracle Linux)
     tags: always
     dnf:
-      update_only: yes
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "OracleLinux"
 
-  - name: install updates (Ubuntu)
+  - name: Update repo cache (Ubuntu)
     tags: always
     apt:
-      upgrade: dist
       update_cache: yes
+    changed_when: false
     when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: add ssh key for simone
+    tags: always
+    authorized_key:
+      user: simone
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMB6dvvClOa2HxE0sUwJOmawMOI0O5GLsFsHC8Jcbav6 ansible"
 
 - hosts: workstations
   become: true
